@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/color"
 	"github.com/carmel/go-pdf/core/draw"
@@ -164,10 +164,10 @@ func createAndValidate(t *testing.T, xRefTable *model.XRefTable, outFile, msg st
 	t.Helper()
 	outDir := "../../samples/basic"
 	outFile = filepath.Join(outDir, outFile)
-	if err := api.CreatePDFFile(xRefTable, outFile, nil); err != nil {
+	if err := pdf.CreatePDFFile(xRefTable, outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

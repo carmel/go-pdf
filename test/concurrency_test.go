@@ -20,13 +20,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
 func TestDisableConfigDir(t *testing.T) {
 	t.Parallel()
-	api.DisableConfigDir()
+	pdf.DisableConfigDir()
 
 	if model.ConfigPath != "disable" {
 		t.Errorf("model.ConfigPath != \"disable\" (%s)", model.ConfigPath)
@@ -41,7 +41,7 @@ func TestDisableConfigDir_Parallel(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			api.DisableConfigDir()
+			pdf.DisableConfigDir()
 		}()
 	}
 	wg.Wait()

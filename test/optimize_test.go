@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 )
 
 func TestOptimize(t *testing.T) {
@@ -30,14 +30,14 @@ func TestOptimize(t *testing.T) {
 	outFile := filepath.Join(outDir, fileName)
 
 	// Create an optimized version of inFile.
-	if err := api.OptimizeFile(inFile, outFile, nil); err != nil {
+	if err := pdf.OptimizeFile(inFile, outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
 	// Create an optimized version of inFile.
 	// If you want to modify the original file, pass an empty string for outFile.
 	inFile = outFile
-	if err := api.OptimizeFile(inFile, "", nil); err != nil {
+	if err := pdf.OptimizeFile(inFile, "", nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

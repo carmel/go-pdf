@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 )
 
 func TestInsertRemovePages(t *testing.T) {
@@ -28,19 +28,19 @@ func TestInsertRemovePages(t *testing.T) {
 	inFile := filepath.Join(inDir, "Acroforms2.pdf")
 	outFile := filepath.Join(outDir, "test.pdf")
 
-	n1, err := api.PageCountFile(inFile)
+	n1, err := pdf.PageCountFile(inFile)
 	if err != nil {
 		t.Fatalf("%s %s: %v\n", msg, inFile, err)
 	}
 
 	// Insert an empty page before pages 1 and 2.
-	if err := api.InsertPagesFile(inFile, outFile, []string{"-2"}, true, nil); err != nil {
+	if err := pdf.InsertPagesFile(inFile, outFile, []string{"-2"}, true, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	n2, err := api.PageCountFile(outFile)
+	n2, err := pdf.PageCountFile(outFile)
 	if err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
@@ -49,13 +49,13 @@ func TestInsertRemovePages(t *testing.T) {
 	}
 
 	// 	// Remove pages 1 and 2.
-	if err := api.RemovePagesFile(outFile, "", []string{"-2"}, nil); err != nil {
+	if err := pdf.RemovePagesFile(outFile, "", []string{"-2"}, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	n2, err = api.PageCountFile(outFile)
+	n2, err = pdf.PageCountFile(outFile)
 	if err != nil {
 		t.Fatalf("%s %s: %v\n", msg, inFile, err)
 	}

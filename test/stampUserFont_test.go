@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 )
 
 func TestStampUserFont(t *testing.T) {
@@ -36,11 +36,11 @@ func TestStampUserFont(t *testing.T) {
 			align, rtl = "r", "on"
 		}
 		desc := fmt.Sprintf("font:%s, rtl:%s, align:%s, scale:1.0 rel, rot:0, fillc:#000000, bgcol:#ab6f30, margin:10, border:10 round, opacity:.7", sample.fontName, rtl, align)
-		err := api.AddTextWatermarksFile(inFile, outFile, nil, true, sample.text, desc, nil)
+		err := pdf.AddTextWatermarksFile(inFile, outFile, nil, true, sample.text, desc, nil)
 		if err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
-		if err := api.ValidateFile(outFile, nil); err != nil {
+		if err := pdf.ValidateFile(outFile, nil); err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 	}

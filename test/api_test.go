@@ -26,7 +26,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/model"
 	"github.com/carmel/go-pdf/core/types"
@@ -60,7 +60,7 @@ func TestMain(m *testing.M) {
 	resDir = filepath.Join(inDir, "resources")
 	samplesDir = "samples"
 
-	conf = api.LoadConfiguration()
+	conf = pdf.LoadConfiguration()
 
 	// Install test user fonts from pkg/testdata/fonts.
 	fonts, err := userFonts(filepath.Join(inDir, "fonts"))
@@ -69,7 +69,7 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	if err := api.InstallFonts(fonts); err != nil {
+	if err := pdf.InstallFonts(fonts); err != nil {
 		fmt.Printf("%v", err)
 		os.Exit(1)
 	}
@@ -124,7 +124,7 @@ func BenchmarkValidate(b *testing.B) {
 		if err != nil {
 			b.Fatalf("%s: %v\n", msg, err)
 		}
-		if err = api.Validate(f, nil); err != nil {
+		if err = pdf.Validate(f, nil); err != nil {
 			b.Fatalf("%s: %v\n", msg, err)
 		}
 		if err = f.Close(); err != nil {
@@ -160,7 +160,7 @@ func TestPageCount(t *testing.T) {
 	inFile := filepath.Join(inDir, fn)
 
 	// Retrieve page count for inFile.
-	gotPageCount, err := api.PageCountFile(inFile)
+	gotPageCount, err := pdf.PageCountFile(inFile)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -176,7 +176,7 @@ func TestPageDimensions(t *testing.T) {
 		inFile := filepath.Join(inDir, fn)
 
 		// Retrieve page dimensions for inFile.
-		if _, err := api.PageDimsFile(inFile); err != nil {
+		if _, err := pdf.PageDimsFile(inFile); err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 	}
@@ -187,7 +187,7 @@ func TestValidate(t *testing.T) {
 	inFile := filepath.Join(inDir, "Acroforms2.pdf")
 
 	// Validate inFile.
-	if err := api.ValidateFile(inFile, nil); err != nil {
+	if err := pdf.ValidateFile(inFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -198,7 +198,7 @@ func TestManipulateContext(t *testing.T) {
 	outFile := filepath.Join(outDir, "abc.pdf")
 
 	// Read a PDF Context from inFile.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s: ReadContextFile %s: %v\n", msg, inFile, err)
 	}
@@ -206,7 +206,7 @@ func TestManipulateContext(t *testing.T) {
 	// Manipulate the PDF Context.
 	// Eg. Let's stamp all pages with pageCount and current timestamp.
 	text := fmt.Sprintf("Pages: %d \n Current time: %v", ctx.PageCount, time.Now())
-	wm, err := api.TextWatermark(text, "font:Times-Italic, scale:.9", true, false, types.POINTS)
+	wm, err := pdf.TextWatermark(text, "font:Times-Italic, scale:.9", true, false, types.POINTS)
 	if err != nil {
 		t.Fatalf("%s: ParseTextWatermarkDetails: %v\n", msg, err)
 	}
@@ -215,7 +215,7 @@ func TestManipulateContext(t *testing.T) {
 	}
 
 	// Write the manipulated PDF context to outFile.
-	if err := api.WriteContextFile(ctx, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctx, outFile); err != nil {
 		t.Fatalf("%s: WriteContextFile %s: %v\n", msg, outFile, err)
 	}
 }
@@ -230,7 +230,7 @@ func TestInfo(t *testing.T) {
 	}
 	defer f.Close()
 
-	info, err := api.PDFInfo(f, inFile, nil, conf)
+	info, err := pdf.PDFInfo(f, inFile, nil, conf)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}

@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -33,19 +33,19 @@ func testBooklet(t *testing.T, msg string, inFiles []string, outFile string, sel
 	)
 
 	if isImg {
-		if booklet, err = api.ImageBookletConfig(n, desc, conf); err != nil {
+		if booklet, err = pdf.ImageBookletConfig(n, desc, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
 	} else {
-		if booklet, err = api.PDFBookletConfig(n, desc, conf); err != nil {
+		if booklet, err = pdf.PDFBookletConfig(n, desc, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
 	}
 
-	if err := api.BookletFile(inFiles, outFile, selectedPages, booklet, conf); err != nil {
+	if err := pdf.BookletFile(inFiles, outFile, selectedPages, booklet, conf); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/model"
 )
@@ -40,7 +40,7 @@ func listPermissions(t *testing.T, fileName string) ([]string, error) {
 	conf := model.NewDefaultConfiguration()
 	conf.Cmd = model.LISTPERMISSIONS
 
-	ctx, err := api.ReadValidateAndOptimize(f, conf)
+	ctx, err := pdf.ReadValidateAndOptimize(f, conf)
 	if err != nil {
 		return nil, err
 	}
@@ -60,34 +60,34 @@ func setPermissions(t *testing.T, aes bool, keyLength int, msg, outFile string) 
 	// Set all permissions of encrypted file w/o passwords should fail.
 	conf := confForAlgorithm(aes, keyLength, "", "")
 	conf.Permissions = model.PermissionsAll
-	if err := api.SetPermissionsFile(outFile, "", conf); err == nil {
+	if err := pdf.SetPermissionsFile(outFile, "", conf); err == nil {
 		t.Fatalf("%s: set all permissions w/o pw for %s\n", msg, outFile)
 	}
 
 	// Set all permissions of encrypted file with user password should fail.
 	conf = confForAlgorithm(aes, keyLength, "upw", "")
 	conf.Permissions = model.PermissionsAll
-	if err := api.SetPermissionsFile(outFile, "", conf); err == nil {
+	if err := pdf.SetPermissionsFile(outFile, "", conf); err == nil {
 		t.Fatalf("%s: set all permissions w/o opw for %s\n", msg, outFile)
 	}
 
 	// Set all permissions of encrypted file with owner password should fail.
 	conf = confForAlgorithm(aes, keyLength, "", "opw")
 	conf.Permissions = model.PermissionsAll
-	if err := api.SetPermissionsFile(outFile, "", conf); err == nil {
+	if err := pdf.SetPermissionsFile(outFile, "", conf); err == nil {
 		t.Fatalf("%s: set all permissions w/o both pws for %s\n", msg, outFile)
 	}
 
 	// Set all permissions of encrypted file using both passwords.
 	conf = confForAlgorithm(aes, keyLength, "upw", "opw")
 	conf.Permissions = model.PermissionsAll
-	if err := api.SetPermissionsFile(outFile, "", conf); err != nil {
+	if err := pdf.SetPermissionsFile(outFile, "", conf); err != nil {
 		t.Fatalf("%s: set all permissions for %s: %v\n", msg, outFile, err)
 	}
 
 	// List permissions using the owner password.
 	conf = confForAlgorithm(aes, keyLength, "", "opw")
-	p, err := api.GetPermissionsFile(outFile, conf)
+	p, err := pdf.GetPermissionsFile(outFile, conf)
 	if err != nil {
 		t.Fatalf("%s: get permissions %s: %v\n", msg, outFile, err)
 	}
@@ -108,7 +108,7 @@ func testEncryption(t *testing.T, fileName string, alg string, keyLength int) {
 	outFile := filepath.Join(outDir, "test.pdf")
 	t.Log(inFile)
 
-	p, err := api.GetPermissionsFile(inFile, nil)
+	p, err := pdf.GetPermissionsFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s: get permissions %s: %v\n", msg, inFile, err)
 	}
@@ -119,7 +119,7 @@ func testEncryption(t *testing.T, fileName string, alg string, keyLength int) {
 
 	// Encrypt file.
 	conf := confForAlgorithm(aes, keyLength, "upw", "opw")
-	if err := api.EncryptFile(inFile, outFile, conf); err != nil {
+	if err := pdf.EncryptFile(inFile, outFile, conf); err != nil {
 		t.Fatalf("%s: encrypt %s: %v\n", msg, outFile, err)
 	}
 
@@ -130,7 +130,7 @@ func testEncryption(t *testing.T, fileName string, alg string, keyLength int) {
 
 	// List permissions of encrypted file using the user password.
 	conf = confForAlgorithm(aes, keyLength, "upw", "")
-	p, err = api.GetPermissionsFile(outFile, conf)
+	p, err = pdf.GetPermissionsFile(outFile, conf)
 	if err != nil {
 		t.Fatalf("%s: get permissions %s: %v\n", msg, inFile, err)
 	}
@@ -141,7 +141,7 @@ func testEncryption(t *testing.T, fileName string, alg string, keyLength int) {
 
 	// List permissions of encrypted file using the owner password.
 	conf = confForAlgorithm(aes, keyLength, "", "opw")
-	p, err = api.GetPermissionsFile(outFile, conf)
+	p, err = pdf.GetPermissionsFile(outFile, conf)
 	if err != nil {
 		t.Fatalf("%s: get permissions %s: %v\n", msg, inFile, err)
 	}
@@ -154,24 +154,24 @@ func testEncryption(t *testing.T, fileName string, alg string, keyLength int) {
 
 	// Change user password.
 	conf = confForAlgorithm(aes, keyLength, "upw", "opw")
-	if err = api.ChangeUserPasswordFile(outFile, "", "upw", "upwNew", conf); err != nil {
+	if err = pdf.ChangeUserPasswordFile(outFile, "", "upw", "upwNew", conf); err != nil {
 		t.Fatalf("%s: change upw %s: %v\n", msg, outFile, err)
 	}
 
 	// Change owner password.
 	conf = confForAlgorithm(aes, keyLength, "upwNew", "opw")
-	if err = api.ChangeOwnerPasswordFile(outFile, "", "opw", "opwNew", conf); err != nil {
+	if err = pdf.ChangeOwnerPasswordFile(outFile, "", "opw", "opwNew", conf); err != nil {
 		t.Fatalf("%s: change opw %s: %v\n", msg, outFile, err)
 	}
 
 	// Decrypt file using both passwords.
 	conf = confForAlgorithm(aes, keyLength, "upwNew", "opwNew")
-	if err = api.DecryptFile(outFile, "", conf); err != nil {
+	if err = pdf.DecryptFile(outFile, "", conf); err != nil {
 		t.Fatalf("%s: decrypt %s: %v\n", msg, outFile, err)
 	}
 
 	// Validate decrypted file.
-	if err = api.ValidateFile(outFile, nil); err != nil {
+	if err = pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: validate %s: %v\n", msg, outFile, err)
 	}
 }
@@ -214,12 +214,12 @@ func TestSetPermissions(t *testing.T) {
 	permNew := model.PermissionsNone | model.PermissionPrintRev2 | model.PermissionPrintRev3
 	conf.Permissions = permNew
 
-	if err := api.EncryptFile(inFile, outFile, conf); err != nil {
+	if err := pdf.EncryptFile(inFile, outFile, conf); err != nil {
 		t.Fatalf("%s: encrypt %s: %v\n", msg, outFile, err)
 	}
 
 	conf = confForAlgorithm(true, 256, "upw", "opw")
-	p, err := api.GetPermissionsFile(outFile, conf)
+	p, err := pdf.GetPermissionsFile(outFile, conf)
 	if err != nil {
 		t.Fatalf("%s: get permissions %s: %v\n", msg, outFile, err)
 	}

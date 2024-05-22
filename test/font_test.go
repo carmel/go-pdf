@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/color"
 	"github.com/carmel/go-pdf/core/draw"
@@ -123,7 +123,7 @@ func TestUserFontDemoPDF(t *testing.T) {
 	// in pkg/samples/fonts/user.
 	for _, fn := range font.UserFontNames() {
 		fmt.Println(fn)
-		if err := api.CreateUserFontDemoFiles(filepath.Join("..", "..", "samples", "fonts", "user"), fn); err != nil {
+		if err := pdf.CreateUserFontDemoFiles(filepath.Join("..", "..", "samples", "fonts", "user"), fn); err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 	}

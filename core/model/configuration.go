@@ -251,7 +251,7 @@ type Configuration struct {
 //	disable:	Disable config dir usage
 //
 // If you want to disable config dir usage in a multi threaded environment
-// you are encouraged to use api.DisableConfigDir().
+// you are encouraged to use pdf.DisableConfigDir().
 var ConfigPath string = "default"
 
 var loadedDefaultConfig *Configuration
@@ -320,7 +320,7 @@ func newDefaultConfiguration() *Configuration {
 	//
 	// Takes effect whenever the installed config.yml is disabled:
 	// 		cli: supply -conf disable
-	// 		api: call api.DisableConfigDir()
+	// 		api: call pdf.DisableConfigDir()
 	return &Configuration{
 		CheckFileNameExt:                true,
 		Reader15:                        true,

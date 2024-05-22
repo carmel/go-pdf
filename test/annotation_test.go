@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/color"
 	"github.com/carmel/go-pdf/core/model"
@@ -90,7 +90,7 @@ func annotationCount(t *testing.T, inFile string) int {
 	}
 	defer f.Close()
 
-	annots, err := api.Annotations(f, nil, conf)
+	annots, err := pdf.Annotations(f, nil, conf)
 	if err != nil {
 		t.Fatalf("%s annotations: %v\n", msg, err)
 	}
@@ -112,12 +112,12 @@ func add2Annotations(t *testing.T, msg, inFile string, incr bool) {
 	}
 
 	// Add a text annotation to page 1.
-	if err := api.AddAnnotationsFile(inFile, "", []string{"1"}, textAnn, nil, incr); err != nil {
+	if err := pdf.AddAnnotationsFile(inFile, "", []string{"1"}, textAnn, nil, incr); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 
 	// Add a link annotation to page 1.
-	if err := api.AddAnnotationsFile(inFile, "", []string{"1"}, linkAnn, nil, incr); err != nil {
+	if err := pdf.AddAnnotationsFile(inFile, "", []string{"1"}, linkAnn, nil, incr); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 
@@ -139,7 +139,7 @@ func TestAddRemoveAnnotationsByAnnotType(t *testing.T) {
 	add2Annotations(t, msg, inFile, incr)
 
 	// Remove annotations by annotation type.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, []string{"Link", "Text"}, nil, nil, false); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, []string{"Link", "Text"}, nil, nil, false); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -161,7 +161,7 @@ func TestAddRemoveAnnotationsById(t *testing.T) {
 	add2Annotations(t, msg, inFile, incr)
 
 	// Remove annotations by id.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "ID2"}, nil, nil, incr); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "ID2"}, nil, nil, incr); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -183,7 +183,7 @@ func TestAddRemoveAnnotationsByIdAndAnnotType(t *testing.T) {
 	add2Annotations(t, msg, inFile, incr)
 
 	// Remove annotations by id annotation type.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "Link"}, nil, nil, incr); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "Link"}, nil, nil, incr); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -201,12 +201,12 @@ func TestAddRemoveAnnotationsByObjNr(t *testing.T) {
 	inFile := filepath.Join(outDir, fn)
 
 	// Create a context.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
 
-	allPages, err := api.PagesForPageSelection(ctx.PageCount, nil, true, true)
+	allPages, err := pdf.PagesForPageSelection(ctx.PageCount, nil, true, true)
 	if err != nil {
 		t.Fatalf("%s pagesForPageSelection: %v\n", msg, err)
 	}
@@ -218,7 +218,7 @@ func TestAddRemoveAnnotationsByObjNr(t *testing.T) {
 	}
 
 	// Write context to file.
-	err = api.WriteContextFile(ctx, inFile)
+	err = pdf.WriteContextFile(ctx, inFile)
 	if err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
@@ -229,7 +229,7 @@ func TestAddRemoveAnnotationsByObjNr(t *testing.T) {
 	}
 
 	// Create a context.
-	ctx, err = api.ReadContextFile(inFile)
+	ctx, err = pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
@@ -244,7 +244,7 @@ func TestAddRemoveAnnotationsByObjNr(t *testing.T) {
 	}
 
 	// Remove annotations by their object numbers
-	// We could also do: api.RemoveAnnotationsFile
+	// We could also do: pdf.RemoveAnnotationsFile
 	// but since we already have the ctx this is more straight forward.
 	_, err = core.RemoveAnnotations(ctx, allPages, nil, objNrs, false)
 	if err != nil {
@@ -252,7 +252,7 @@ func TestAddRemoveAnnotationsByObjNr(t *testing.T) {
 	}
 
 	// Write context to file.
-	err = api.WriteContextFile(ctx, inFile)
+	err = pdf.WriteContextFile(ctx, inFile)
 	if err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
@@ -276,7 +276,7 @@ func TestAddRemoveAnnotationsByObjNrAndAnnotType(t *testing.T) {
 
 	// Remove annotations by obj and annotation type.
 	// Here we use the obj# of the link Annotation to be removed.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, []string{"Link"}, []int{6}, nil, incr); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, []string{"Link"}, []int{6}, nil, incr); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -298,7 +298,7 @@ func TestAddRemoveAnnotationsByIdAndObjNrAndAnnotType(t *testing.T) {
 	add2Annotations(t, msg, inFile, incr)
 
 	// Remove annotations by id annotation type.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "Link"}, nil, nil, incr); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, []string{"ID1", "Link"}, nil, nil, incr); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -323,7 +323,7 @@ func TestRemoveAllAnnotations(t *testing.T) {
 	anns[1] = linkAnn
 	m[1] = anns
 
-	err := api.AddAnnotationsMapFile(inFile, "", m, nil, incr)
+	err := pdf.AddAnnotationsMapFile(inFile, "", m, nil, incr)
 	if err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
@@ -334,7 +334,7 @@ func TestRemoveAllAnnotations(t *testing.T) {
 	}
 
 	// Remove all annotations.
-	err = api.RemoveAnnotationsFile(inFile, "", nil, nil, nil, nil, incr)
+	err = pdf.RemoveAnnotationsFile(inFile, "", nil, nil, nil, nil, incr)
 	if err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
@@ -357,7 +357,7 @@ func TestAddRemoveAllAnnotationsAsIncrements(t *testing.T) {
 	add2Annotations(t, msg, inFile, incr)
 
 	// Remove all page annotations and append the result as PDF increment to inFile.
-	if err := api.RemoveAnnotationsFile(inFile, "", nil, nil, nil, nil, true); err != nil {
+	if err := pdf.RemoveAnnotationsFile(inFile, "", nil, nil, nil, nil, true); err != nil {
 		t.Fatalf("%s remove: %v\n", msg, err)
 	}
 
@@ -375,7 +375,7 @@ func TestAddAnnotationsLowLevel(t *testing.T) {
 	outFile := filepath.Join(outDir, fn)
 
 	// Create a context.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
@@ -392,12 +392,12 @@ func TestAddAnnotationsLowLevel(t *testing.T) {
 	}
 
 	// Write context to file.
-	if err := api.WriteContextFile(ctx, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctx, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 
 	// Create a context.
-	ctx, err = api.ReadContextFile(outFile)
+	ctx, err = pdf.ReadContextFile(outFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
@@ -421,7 +421,7 @@ func TestAddAnnotationsLowLevel(t *testing.T) {
 	}
 
 	// Write context to file.
-	if err := api.WriteContextFile(ctx, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctx, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 
@@ -454,7 +454,7 @@ func TestAddLinkAnnotationWithDest(t *testing.T) {
 		true,
 	)
 
-	err := api.AddAnnotationsFile(inFile, outFile, []string{"2"}, internalLink, nil, false)
+	err := pdf.AddAnnotationsFile(inFile, outFile, []string{"2"}, internalLink, nil, false)
 	if err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
@@ -467,22 +467,22 @@ func TestAddAnnotationsFile(t *testing.T) {
 	outFile := filepath.Join(samplesDir, "annotations", "TestAnnotationsFile.pdf")
 
 	// Add text annotation.
-	if err := api.AddAnnotationsFile(inFile, outFile, nil, textAnn, nil, false); err != nil {
+	if err := pdf.AddAnnotationsFile(inFile, outFile, nil, textAnn, nil, false); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 
 	// Add link annotation.
-	if err := api.AddAnnotationsFile(outFile, outFile, nil, linkAnn, nil, false); err != nil {
+	if err := pdf.AddAnnotationsFile(outFile, outFile, nil, linkAnn, nil, false); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 
 	// Add square annotation.
-	if err := api.AddAnnotationsFile(outFile, outFile, nil, squareAnn, nil, false); err != nil {
+	if err := pdf.AddAnnotationsFile(outFile, outFile, nil, squareAnn, nil, false); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 
 	// Add circle annotation.
-	if err := api.AddAnnotationsFile(outFile, outFile, nil, circleAnn, nil, false); err != nil {
+	if err := pdf.AddAnnotationsFile(outFile, outFile, nil, circleAnn, nil, false); err != nil {
 		t.Fatalf("%s add: %v\n", msg, err)
 	}
 }
@@ -494,7 +494,7 @@ func TestAddAnnotations(t *testing.T) {
 	outFile := filepath.Join(samplesDir, "annotations", "TestAnnotations.pdf")
 
 	// Create a context from inFile.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
@@ -514,7 +514,7 @@ func TestAddAnnotations(t *testing.T) {
 	}
 
 	// Write context to outFile.
-	if err := api.WriteContextFile(ctx, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctx, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 

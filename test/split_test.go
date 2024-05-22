@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 )
 
@@ -31,7 +31,7 @@ func TestSplitSpan1(t *testing.T) {
 
 	// Create single page files of inFile in outDir.
 	span := 1
-	if err := api.SplitFile(inFile, outDir, span, nil); err != nil {
+	if err := pdf.SplitFile(inFile, outDir, span, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -43,7 +43,7 @@ func TestSplitSpan2(t *testing.T) {
 
 	// Create dual page files of inFile in outDir.
 	span := 2
-	if err := api.SplitFile(inFile, outDir, span, nil); err != nil {
+	if err := pdf.SplitFile(inFile, outDir, span, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -55,7 +55,7 @@ func TestSplitByBookmark(t *testing.T) {
 
 	// Split along bookmarks.
 	span := 0
-	if err := api.SplitFile(inFile, outDir, span, nil); err != nil {
+	if err := pdf.SplitFile(inFile, outDir, span, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -70,7 +70,7 @@ func TestSplitByPageNr(t *testing.T) {
 	// Generate page section 10-49
 	// Generate page section 50-last page
 
-	if err := api.SplitByPageNrFile(inFile, outDir, []int{2, 10, 50}, nil); err != nil {
+	if err := pdf.SplitByPageNrFile(inFile, outDir, []int{2, 10, 50}, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -81,14 +81,14 @@ func TestSplitLowLevel(t *testing.T) {
 	outFile := filepath.Join(outDir, "MyExtractedPageSpan.pdf")
 
 	// Create a context.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
 
 	// Extract a page span.
 	from, thru := 2, 4
-	selectedPages := api.PagesForPageRange(from, thru)
+	selectedPages := pdf.PagesForPageRange(from, thru)
 	usePgCache := false
 	ctxNew, err := core.ExtractPages(ctx, selectedPages, usePgCache)
 	if err != nil {
@@ -98,7 +98,7 @@ func TestSplitLowLevel(t *testing.T) {
 	// Here you can process this single page PDF context.
 
 	// Write context to file.
-	if err := api.WriteContextFile(ctxNew, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctxNew, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 }

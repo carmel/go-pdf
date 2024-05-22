@@ -22,13 +22,13 @@ import (
 
 	"strings"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/types"
 )
 
 func testPageSelectionSyntaxOk(t *testing.T, s string) {
 	t.Helper()
-	_, err := api.ParsePageSelection(s)
+	_, err := pdf.ParsePageSelection(s)
 	if err != nil {
 		t.Errorf("doTestPageSelectionSyntaxOk(%s)\n", s)
 	}
@@ -36,7 +36,7 @@ func testPageSelectionSyntaxOk(t *testing.T, s string) {
 
 func testPageSelectionSyntaxFail(t *testing.T, s string) {
 	t.Helper()
-	_, err := api.ParsePageSelection(s)
+	_, err := pdf.ParsePageSelection(s)
 	if err == nil {
 		t.Errorf("doTestPageSelectionSyntaxFail(%s)\n", s)
 	}
@@ -76,12 +76,12 @@ func selectedPagesString(sp types.IntSet, pageCount int) string {
 }
 
 func testSelectedPages(s string, pageCount int, compareString string, t *testing.T) {
-	pageSelection, err := api.ParsePageSelection(s)
+	pageSelection, err := pdf.ParsePageSelection(s)
 	if err != nil {
 		t.Fatalf("testSelectedPages(%s) %v\n", s, err)
 	}
 
-	selectedPages, err := api.PagesForPageSelection(pageCount, pageSelection, false, true)
+	selectedPages, err := pdf.PagesForPageSelection(pageCount, pageSelection, false, true)
 	if err != nil {
 		t.Fatalf("testSelectedPages(%s) %v\n", s, err)
 	}
@@ -151,12 +151,12 @@ func collectedPagesString(cp []int) string {
 }
 
 func testCollectedPages(s string, pageCount int, want string, t *testing.T) {
-	pageSelection, err := api.ParsePageSelection(s)
+	pageSelection, err := pdf.ParsePageSelection(s)
 	if err != nil {
 		t.Fatalf("testCollectedPages(%s) %v\n", s, err)
 	}
 
-	collectedPages, err := api.PagesForPageCollection(pageCount, pageSelection)
+	collectedPages, err := pdf.PagesForPageCollection(pageCount, pageSelection)
 	if err != nil {
 		t.Fatalf("testCollectedPages(%s) %v\n", s, err)
 	}

@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/model"
 	"github.com/carmel/go-pdf/core/types"
@@ -34,7 +34,7 @@ func TestAlternatingPageNumbersViaWatermarkMap(t *testing.T) {
 	inFile := filepath.Join(inDir, "WaldenFull.pdf")
 	outFile := filepath.Join(samplesDir, "stamp", "mixed", "AlternatingPageNumbersViaWatermarkMap.pdf")
 
-	pageCount, err := api.PageCountFile(inFile)
+	pageCount, err := pdf.PageCountFile(inFile)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -60,25 +60,25 @@ func TestAlternatingPageNumbersViaWatermarkMap(t *testing.T) {
 			fillCol = "#0000E0"
 		}
 		desc := fmt.Sprintf("font:%s, points:12, scale:1 abs, pos:%s, off:%d 10, fillcol:%s, rot:0", fontName, pos, dx, fillCol)
-		wm, err := api.TextWatermark(text, desc, true, false, types.POINTS)
+		wm, err := pdf.TextWatermark(text, desc, true, false, types.POINTS)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 		m[i] = wm
 	}
 
-	if err := api.AddWatermarksMapFile(inFile, outFile, m, nil); err != nil {
+	if err := pdf.AddWatermarksMapFile(inFile, outFile, m, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
 
 	// Add a stamp with the creation date on the center of the bottom of every page.
 	text := fmt.Sprintf("%%p of %%P - Creation date: %v", time.Now().Format("2006-01-02 15:04"))
-	if err := api.AddTextWatermarksFile(outFile, outFile, nil, true, text, "fo:Roboto-Regular, points:12, scale:1 abs, pos:bc, off:0 10, rot:0", nil); err != nil {
+	if err := pdf.AddTextWatermarksFile(outFile, outFile, nil, true, text, "fo:Roboto-Regular, points:12, scale:1 abs, pos:bc, off:0 10, rot:0", nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
 
 	// Add a "Draft" stamp with opacity 0.6 along the 1st diagonale in light blue using Courier.
-	if err := api.AddTextWatermarksFile(outFile, outFile, nil, true, "Draft", "fo:Courier, scale:.9, fillcol:#00aacc, op:.6", nil); err != nil {
+	if err := pdf.AddTextWatermarksFile(outFile, outFile, nil, true, "Draft", "fo:Courier, scale:.9, fillcol:#00aacc, op:.6", nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
 }
@@ -89,7 +89,7 @@ func TestAlternatingPageNumbersViaWatermarkMapLowLevel(t *testing.T) {
 	outFile := filepath.Join(samplesDir, "stamp", "mixed", "AlternatingPageNumbersViaWatermarkMapLowLevel.pdf")
 
 	// Create a context.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
@@ -113,7 +113,7 @@ func TestAlternatingPageNumbersViaWatermarkMapLowLevel(t *testing.T) {
 			fillCol = "#0000E0"
 		}
 		desc := fmt.Sprintf("font:%s, points:12, scale:1 abs, pos:%s, off:%d 10, fillcol:%s, rot:0", fontName, pos, dx, fillCol)
-		wm, err := api.TextWatermark(text, desc, true, false, unit)
+		wm, err := pdf.TextWatermark(text, desc, true, false, unit)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
@@ -126,7 +126,7 @@ func TestAlternatingPageNumbersViaWatermarkMapLowLevel(t *testing.T) {
 
 	// Add a stamp with the creation date on the center of the bottom of every page.
 	text := fmt.Sprintf("%%p of %%P - Creation date: %v", time.Now().Format("2006-01-02 15:04"))
-	wm, err := api.TextWatermark(text, "fo:Roboto-Regular, points:12, scale:1 abs, pos:bc, off:0 10, rot:0", true, false, unit)
+	wm, err := pdf.TextWatermark(text, "fo:Roboto-Regular, points:12, scale:1 abs, pos:bc, off:0 10, rot:0", true, false, unit)
 	if err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
@@ -135,7 +135,7 @@ func TestAlternatingPageNumbersViaWatermarkMapLowLevel(t *testing.T) {
 	}
 
 	// Add a "Draft" stamp with opacity 0.6 along the 1st diagonale in light blue using Courier.
-	wm, err = api.TextWatermark("Draft", "fo:Courier, scale:.9, fillcol:#00aacc, op:.6", true, false, unit)
+	wm, err = pdf.TextWatermark("Draft", "fo:Courier, scale:.9, fillcol:#00aacc, op:.6", true, false, unit)
 	if err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
@@ -144,7 +144,7 @@ func TestAlternatingPageNumbersViaWatermarkMapLowLevel(t *testing.T) {
 	}
 
 	// Write context to file.
-	if err := api.WriteContextFile(ctx, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctx, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 }
@@ -154,7 +154,7 @@ func TestAlternatingPageNumbersViaWatermarkSliceMap(t *testing.T) {
 	inFile := filepath.Join(inDir, "WaldenFull.pdf")
 	outFile := filepath.Join(samplesDir, "stamp", "mixed", "AlternatingPageNumbersViaWatermarkSliceMap.pdf")
 
-	pageCount, err := api.PageCountFile(inFile)
+	pageCount, err := pdf.PageCountFile(inFile)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -187,7 +187,7 @@ func TestAlternatingPageNumbersViaWatermarkSliceMap(t *testing.T) {
 			fillCol = "#0000E0"
 		}
 		desc := fmt.Sprintf("font:%s, points:12, scale:1 abs, pos:%s, off:%d 10, fillcol:%s, rot:0, op:%f", fontName, pos, dx, fillCol, opacity)
-		wm, err := api.TextWatermark(text, desc, onTop, update, unit)
+		wm, err := pdf.TextWatermark(text, desc, onTop, update, unit)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
@@ -197,7 +197,7 @@ func TestAlternatingPageNumbersViaWatermarkSliceMap(t *testing.T) {
 		// Add a stamp with the creation date on the center of the bottom of every page.
 		text = fmt.Sprintf("%%p of %%P - Creation date: %v", time.Now().Format("2006-01-02 15:04"))
 		desc = fmt.Sprintf("fo:Roboto-Regular, points:12, scale:1 abs, pos:bc, off:0 10, rot:0, op:%f", opacity)
-		wm, err = api.TextWatermark(text, desc, onTop, update, unit)
+		wm, err = pdf.TextWatermark(text, desc, onTop, update, unit)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
@@ -207,7 +207,7 @@ func TestAlternatingPageNumbersViaWatermarkSliceMap(t *testing.T) {
 		// Add a "Draft" stamp with opacity 0.6 along the 1st diagonale in light blue using Courier.
 		text = "Draft"
 		desc = fmt.Sprintf("fo:Courier, scale:.9, fillcol:#00aacc, op:%f", opacity)
-		wm, err = api.TextWatermark(text, desc, onTop, update, unit)
+		wm, err = pdf.TextWatermark(text, desc, onTop, update, unit)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
@@ -219,7 +219,7 @@ func TestAlternatingPageNumbersViaWatermarkSliceMap(t *testing.T) {
 	// Apply all watermarks in one Go.
 	// Assumption: All watermarks share the same opacity and onTop (all stamps or watermarks).
 	// If you cannot ensure this you have to do something along the lines of func TestAlternatingPageNumbersViaWatermarkMap
-	if err := api.AddWatermarksSliceMapFile(inFile, outFile, m, nil); err != nil {
+	if err := pdf.AddWatermarksSliceMapFile(inFile, outFile, m, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
 }
@@ -229,7 +229,7 @@ func TestImagesTextAndPDFWMViaWatermarkMap(t *testing.T) {
 	inFile := filepath.Join(inDir, "WaldenFull.pdf")
 	outFile := filepath.Join(samplesDir, "stamp", "mixed", "ImagesTextAndPDFWMViaWatermarkMap.pdf")
 
-	pageCount, err := api.PageCountFile(inFile)
+	pageCount, err := pdf.PageCountFile(inFile)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -246,7 +246,7 @@ func TestImagesTextAndPDFWMViaWatermarkMap(t *testing.T) {
 	for i := 1; i <= pageCount; i++ {
 		if i <= len(fileNames) {
 			desc := fmt.Sprintf("pos:bl, scale:.25, rot:0, op:%f", opacity)
-			wm, err := api.ImageWatermark(fileNames[i-1], desc, onTop, update, unit)
+			wm, err := pdf.ImageWatermark(fileNames[i-1], desc, onTop, update, unit)
 			if err != nil {
 				t.Fatalf("%s: %v\n", msg, err)
 			}
@@ -256,7 +256,7 @@ func TestImagesTextAndPDFWMViaWatermarkMap(t *testing.T) {
 
 		if i%2 > 0 {
 			desc := fmt.Sprintf("scale:.25, pos:br, rot:0, op:%f", opacity)
-			wm, err := api.PDFWatermark(inFile+":1", desc, onTop, update, unit)
+			wm, err := pdf.PDFWatermark(inFile+":1", desc, onTop, update, unit)
 			if err != nil {
 				t.Fatalf("%s: %v\n", msg, err)
 			}
@@ -265,7 +265,7 @@ func TestImagesTextAndPDFWMViaWatermarkMap(t *testing.T) {
 		}
 
 		desc := fmt.Sprintf("rot:0, op:%f", opacity)
-		wm, err := api.TextWatermark("Even page number", desc, onTop, update, unit)
+		wm, err := pdf.TextWatermark("Even page number", desc, onTop, update, unit)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
@@ -275,7 +275,7 @@ func TestImagesTextAndPDFWMViaWatermarkMap(t *testing.T) {
 	// Apply all watermarks in one Go.
 	// Assumption: All watermarks share the same opacity and onTop (all stamps or watermarks).
 	// If you cannot ensure this you have to do something along the lines of func TestAlternatingPageNumbersViaWatermarkMap
-	if err := api.AddWatermarksMapFile(inFile, outFile, m, nil); err != nil {
+	if err := pdf.AddWatermarksMapFile(inFile, outFile, m, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
 }
@@ -306,7 +306,7 @@ func TestPdfSingleStampVariations(t *testing.T) {
 			0, // special case defaulting to multistamping
 		},
 	} {
-		wm, err := api.PDFWatermarkForReadSeeker(
+		wm, err := pdf.PDFWatermarkForReadSeeker(
 			rs,
 			tt.pageNrSrc,
 			"scale:.2, pos:tr, off:-10 -10, rot:0", // scaled @ top right corner using some offset and 0 rotation.
@@ -321,7 +321,7 @@ func TestPdfSingleStampVariations(t *testing.T) {
 
 		outFile := filepath.Join(samplesDir, "stamp", "mixed", tt.outFile)
 
-		if err = api.AddWatermarksFile(inFile, outFile, nil, wm, conf); err != nil {
+		if err = pdf.AddWatermarksFile(inFile, outFile, nil, wm, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", tt.msg, outFile, err)
 		}
 	}
@@ -369,7 +369,7 @@ func TestPdfMultiStampVariations(t *testing.T) {
 			3,
 		},
 	} {
-		wm, err := api.PDFMultiWatermarkForReadSeeker(
+		wm, err := pdf.PDFMultiWatermarkForReadSeeker(
 			rs,
 			tt.startPageNrSrc,
 			tt.startPageNrDest,
@@ -385,7 +385,7 @@ func TestPdfMultiStampVariations(t *testing.T) {
 
 		outFile := filepath.Join(samplesDir, "stamp", "mixed", tt.outFile)
 
-		if err = api.AddWatermarksFile(inFile, outFile, nil, wm, conf); err != nil {
+		if err = pdf.AddWatermarksFile(inFile, outFile, nil, wm, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", tt.msg, outFile, err)
 		}
 	}

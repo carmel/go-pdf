@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -33,7 +33,7 @@ func TestPageMode(t *testing.T) {
 
 	pageMode := model.PageModeUseOutlines
 
-	pl, err := api.PageModeFile(inFile, nil)
+	pl, err := pdf.PageModeFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list pageMode: %v\n", msg, inFile, err)
 	}
@@ -41,11 +41,11 @@ func TestPageMode(t *testing.T) {
 		t.Fatalf("%s %s: list pageMode, unexpected: %s\n", msg, inFile, pl)
 	}
 
-	if err := api.SetPageModeFile(inFile, "", pageMode, nil); err != nil {
+	if err := pdf.SetPageModeFile(inFile, "", pageMode, nil); err != nil {
 		t.Fatalf("%s %s: set pageMode: %v\n", msg, inFile, err)
 	}
 
-	pm, err := api.PageModeFile(inFile, nil)
+	pm, err := pdf.PageModeFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list pageMode: %v\n", msg, inFile, err)
 	}
@@ -56,11 +56,11 @@ func TestPageMode(t *testing.T) {
 		t.Fatalf("%s %s: list pageMode, want:%s, got:%s\n", msg, inFile, pageMode.String(), pm.String())
 	}
 
-	if err := api.ResetPageModeFile(inFile, "", nil); err != nil {
+	if err := pdf.ResetPageModeFile(inFile, "", nil); err != nil {
 		t.Fatalf("%s %s: reset pageMode: %v\n", msg, inFile, err)
 	}
 
-	pl, err = api.PageModeFile(inFile, nil)
+	pl, err = pdf.PageModeFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list pageMode: %v\n", msg, inFile, err)
 	}

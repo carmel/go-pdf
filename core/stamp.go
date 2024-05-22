@@ -552,7 +552,7 @@ func setTextWatermark(s string, wm *model.Watermark) {
 
 func setImageWatermark(s string, wm *model.Watermark) error {
 	if len(s) == 0 {
-		// The caller is expected to provide: wm.Image (see api.ImageWatermarkForReader)
+		// The caller is expected to provide: wm.Image (see pdf.ImageWatermarkForReader)
 		return nil
 	}
 	if !model.ImageFileName(s) {
@@ -578,9 +578,9 @@ func setPDFWatermark(s string, wm *model.Watermark) error {
 	if len(s) == 0 {
 		/*
 			The caller is expected to provide:
-				wm.PDF and optionally wm.PdfPageNrSrc (see api.PDFWatermarkForReadSeeker)
+				wm.PDF and optionally wm.PdfPageNrSrc (see pdf.PDFWatermarkForReadSeeker)
 			or
-				wm.PDF and wm.PdfMultiStartPageNrSrc and wm.PdfMultiStartPageNrDest (see api.PDFMultiWatermarkForReadSeeker)
+				wm.PDF and wm.PdfMultiStartPageNrSrc and wm.PdfMultiStartPageNrDest (see pdf.PDFMultiWatermarkForReadSeeker)
 
 			Supported usecases:
 

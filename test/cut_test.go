@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/types"
 )
@@ -36,7 +36,7 @@ func testCut(t *testing.T, msg, inFile, outDir, outFile string, unit types.Displ
 	inFile = filepath.Join(inDir, inFile)
 	outDir = filepath.Join(samplesDir, outDir)
 
-	if err := api.CutFile(inFile, outDir, outFile, nil, cut, nil); err != nil {
+	if err := pdf.CutFile(inFile, outDir, outFile, nil, cut, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -106,7 +106,7 @@ func testNDown(t *testing.T, msg, inFile, outDir, outFile string, n int, unit ty
 	inFile = filepath.Join(inDir, inFile)
 	outDir = filepath.Join(samplesDir, outDir)
 
-	if err := api.NDownFile(inFile, outDir, outFile, nil, n, cut, nil); err != nil {
+	if err := pdf.NDownFile(inFile, outDir, outFile, nil, n, cut, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -167,7 +167,7 @@ func testPoster(t *testing.T, msg, inFile, outDir, outFile string, unit types.Di
 	inFile = filepath.Join(inDir, inFile)
 	outDir = filepath.Join(samplesDir, outDir)
 
-	if err := api.PosterFile(inFile, outDir, outFile, nil, cut, nil); err != nil {
+	if err := pdf.PosterFile(inFile, outDir, outFile, nil, cut, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

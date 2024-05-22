@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/types"
 )
@@ -37,7 +37,7 @@ func TestResizeByScaleFactor(t *testing.T) {
 	}
 
 	outFile := filepath.Join(samplesDir, "resize", "enlargeByScaleFactor.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 
@@ -48,7 +48,7 @@ func TestResizeByScaleFactor(t *testing.T) {
 	}
 
 	outFile = filepath.Join(samplesDir, "resize", "shrinkByScaleFactor.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 }
@@ -65,7 +65,7 @@ func TestResizeByWidthOrHeight(t *testing.T) {
 	}
 
 	outFile := filepath.Join(samplesDir, "resize", "resizeByWidth.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 
@@ -76,7 +76,7 @@ func TestResizeByWidthOrHeight(t *testing.T) {
 	}
 
 	outFile = filepath.Join(samplesDir, "resize", "resizeByHeight.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 }
@@ -93,7 +93,7 @@ func TestResizeToFormSize(t *testing.T) {
 	}
 
 	outFile := filepath.Join(samplesDir, "resize", "resizeToA3.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 
@@ -104,7 +104,7 @@ func TestResizeToFormSize(t *testing.T) {
 	}
 
 	outFile = filepath.Join(samplesDir, "resize", "resizeToA4L.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 }
@@ -122,7 +122,7 @@ func TestResizeToDimensions(t *testing.T) {
 	}
 
 	outFile := filepath.Join(samplesDir, "resize", "resizeToDimensionsKeep.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 
@@ -134,7 +134,7 @@ func TestResizeToDimensions(t *testing.T) {
 	}
 
 	outFile = filepath.Join(samplesDir, "resize", "resizeToDimensionsEnforce.pdf")
-	if err := api.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
+	if err := pdf.ResizeFile(inFile, outFile, nil, res, nil); err != nil {
 		t.Fatalf("%s resize: %v\n", msg, err)
 	}
 }

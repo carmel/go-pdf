@@ -21,22 +21,22 @@ import (
 	"os"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/primitives"
 )
 
 func TestCreatePDF(t *testing.T) {
 	t.Helper()
 
-	// if err := api.CreateFile("", "testdata/json/create/textAndAlignment.json", "textAndAlignmentFromJson.pdf", conf); err != nil {
+	// if err := pdf.CreateFile("", "testdata/json/create/textAndAlignment.json", "textAndAlignmentFromJson.pdf", conf); err != nil {
 	// 	t.Fatalf("TestTextAlignment CreateFile: %v\n", err)
 	// }
 
-	// if err := api.ValidateFile("textAndAlignmentFromJson.pdf", nil); err != nil {
+	// if err := pdf.ValidateFile("textAndAlignmentFromJson.pdf", nil); err != nil {
 	// 	t.Fatalf("TestTextAlignment ValidateFile: %v\n", err)
 	// }
 
-	pdf := &primitives.PDF{
+	entity := &primitives.PDF{
 		Paper:      "A4P",
 		Crop:       "10",
 		Origin:     "LowerLeft",
@@ -491,13 +491,13 @@ func TestCreatePDF(t *testing.T) {
 	}
 
 	outFile, _ := os.Create("textAndAlignment.pdf")
-	conf := api.LoadConfiguration()
-	err := api.CreatePDF(io.ReadSeeker(nil), pdf, outFile, conf)
+	conf := pdf.LoadConfiguration()
+	err := pdf.CreatePDF(io.ReadSeeker(nil), entity, outFile, conf)
 	if err != nil {
 		t.Fatalf("TestTextAlignmentFromStruct CreatePDF: %v\n", err)
 	}
 
-	if err := api.ValidateFile("textAndAlignment.pdf", nil); err != nil {
+	if err := pdf.ValidateFile("textAndAlignment.pdf", nil); err != nil {
 		t.Fatalf("TestTextAlignmentFromStruct ValidateFile: %v\n", err)
 	}
 }

@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -33,7 +33,7 @@ func TestViewerPreferences(t *testing.T) {
 	inFileJSON := filepath.Join(inDir, "json", "viewerPreferences.json")
 	stringJSON := "{\"HideMenuBar\": true, \"CenterWindow\": true}"
 
-	vp, err := api.ViewerPreferencesFile(inFile, false, nil)
+	vp, err := pdf.ViewerPreferencesFile(inFile, false, nil)
 	if err != nil {
 		t.Fatalf("%s %s: viewerPref struct: %v\n", msg, inFile, err)
 	}
@@ -41,11 +41,11 @@ func TestViewerPreferences(t *testing.T) {
 		t.Fatalf("%s %s: missing viewerPref struct\n", msg, inFile)
 	}
 
-	if err := api.ResetViewerPreferencesFile(inFile, "", nil); err != nil {
+	if err := pdf.ResetViewerPreferencesFile(inFile, "", nil); err != nil {
 		t.Fatalf("%s %s: reset: %v\n", msg, inFile, err)
 	}
 
-	vp, err = api.ViewerPreferencesFile(inFile, false, nil)
+	vp, err = pdf.ViewerPreferencesFile(inFile, false, nil)
 	if err != nil {
 		t.Fatalf("%s %s: viewerPref struct: %v\n", msg, inFile, err)
 	}
@@ -53,11 +53,11 @@ func TestViewerPreferences(t *testing.T) {
 		t.Fatalf("%s %s: unexpected viewerPref struct: %v\n", msg, inFile, vp)
 	}
 
-	if err := api.SetViewerPreferencesFileFromJSONFile(inFile, "", inFileJSON, nil); err != nil {
+	if err := pdf.SetViewerPreferencesFileFromJSONFile(inFile, "", inFileJSON, nil); err != nil {
 		t.Fatalf("%s %s: set via JSON file: %v\n", msg, inFile, err)
 	}
 
-	vp, err = api.ViewerPreferencesFile(inFile, false, nil)
+	vp, err = pdf.ViewerPreferencesFile(inFile, false, nil)
 	if err != nil {
 		t.Fatalf("%s %s: viewerPref struct: %v\n", msg, inFile, err)
 	}
@@ -70,11 +70,11 @@ func TestViewerPreferences(t *testing.T) {
 	vp.SetHideMenuBar(true)
 	vp.SetNumCopies(5)
 
-	if err := api.SetViewerPreferencesFile(inFile, "", *vp, nil); err != nil {
+	if err := pdf.SetViewerPreferencesFile(inFile, "", *vp, nil); err != nil {
 		t.Fatalf("%s %s: set: %v\n", msg, inFile, err)
 	}
 
-	if err := api.SetViewerPreferencesFileFromJSONBytes(inFile, "", []byte(stringJSON), nil); err != nil {
+	if err := pdf.SetViewerPreferencesFileFromJSONBytes(inFile, "", []byte(stringJSON), nil); err != nil {
 		t.Fatalf("%s %s: set via JSON string: %v\n", msg, inFile, err)
 	}
 }

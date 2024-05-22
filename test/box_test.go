@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 	"github.com/carmel/go-pdf/core/types"
 )
@@ -37,7 +37,7 @@ func listBoxes(t *testing.T, fileName string, pb *model.PageBoundaries) ([]strin
 	}
 	defer f.Close()
 
-	ctx, err := api.ReadValidateAndOptimize(f, conf)
+	ctx, err := pdf.ReadValidateAndOptimize(f, conf)
 	if err != nil {
 		t.Fatalf("%s ReadValidateAndOptimize: %v\n", msg, err)
 	}
@@ -59,7 +59,7 @@ func TestListBoxes(t *testing.T) {
 	}
 
 	// List crop box for all pages.
-	pb, err := api.PageBoundariesFromBoxList("crop")
+	pb, err := pdf.PageBoundariesFromBoxList("crop")
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -88,12 +88,12 @@ func TestCrop(t *testing.T) {
 		{"-1", types.INCHES},
 		{"-25%", types.POINTS},
 	} {
-		box, err := api.Box(tt.s, tt.u)
+		box, err := pdf.Box(tt.s, tt.u)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 
-		if err := api.CropFile(inFile, outFile, nil, box, nil); err != nil {
+		if err := pdf.CropFile(inFile, outFile, nil, box, nil); err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 	}
@@ -118,12 +118,12 @@ func TestAddBoxes(t *testing.T) {
 		{"c:10 20, t:c, a:b, b:m", types.POINTS},
 		{"crop:10, trim:20, art:trim", types.POINTS},
 	} {
-		pb, err := api.PageBoundaries(tt.s, tt.u)
+		pb, err := pdf.PageBoundaries(tt.s, tt.u)
 		if err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 
-		if err := api.AddBoxesFile(inFile, outFile, nil, pb, nil); err != nil {
+		if err := pdf.AddBoxesFile(inFile, outFile, nil, pb, nil); err != nil {
 			t.Fatalf("%s: %v\n", msg, err)
 		}
 	}
@@ -134,19 +134,19 @@ func TestAddRemoveBoxes(t *testing.T) {
 	inFile := filepath.Join(inDir, "test.pdf")
 	outFile := filepath.Join(outDir, "out.pdf")
 
-	pb, err := api.PageBoundaries("crop:[0 0 100 100]", types.POINTS)
+	pb, err := pdf.PageBoundaries("crop:[0 0 100 100]", types.POINTS)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	if err := api.AddBoxesFile(inFile, outFile, nil, pb, nil); err != nil {
+	if err := pdf.AddBoxesFile(inFile, outFile, nil, pb, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	pb, err = api.PageBoundariesFromBoxList("crop")
+	pb, err = pdf.PageBoundariesFromBoxList("crop")
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	if err := api.RemoveBoxesFile(outFile, outFile, nil, pb, nil); err != nil {
+	if err := pdf.RemoveBoxesFile(outFile, outFile, nil, pb, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

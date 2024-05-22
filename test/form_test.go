@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/form"
 	"github.com/carmel/go-pdf/core/model"
 )
@@ -46,7 +46,7 @@ func listFormFieldsFile(t *testing.T, inFile string, conf *model.Configuration) 
 	}
 	defer f.Close()
 
-	ctx, err := api.ReadValidateAndOptimize(f, conf)
+	ctx, err := pdf.ReadValidateAndOptimize(f, conf)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
@@ -81,7 +81,7 @@ func TestRemoveFormFields(t *testing.T) {
 	}
 	want := len(ss) - 2
 
-	if err := api.RemoveFormFieldsFile(inFile, outFile, []string{"dob1", "firstName1"}, conf); err != nil {
+	if err := pdf.RemoveFormFieldsFile(inFile, outFile, []string{"dob1", "firstName1"}, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
@@ -111,7 +111,7 @@ func TestResetFormFields(t *testing.T) {
 	} {
 		inFile := filepath.Join(samplesDir, "form", "demoSinglePage", tt.inFile)
 		outFile := filepath.Join(samplesDir, "form", "reset", tt.outFile)
-		if err := api.ResetFormFieldsFile(inFile, outFile, nil, conf); err != nil {
+		if err := pdf.ResetFormFieldsFile(inFile, outFile, nil, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -133,7 +133,7 @@ func TestLockFormFields(t *testing.T) {
 	} {
 		inFile := filepath.Join(samplesDir, "form", "demoSinglePage", tt.inFile)
 		outFile := filepath.Join(samplesDir, "form", "lock", tt.outFile)
-		if err := api.LockFormFieldsFile(inFile, outFile, nil, conf); err != nil {
+		if err := pdf.LockFormFieldsFile(inFile, outFile, nil, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -154,7 +154,7 @@ func TestUnlockFormFields(t *testing.T) {
 	} {
 		inFile := filepath.Join(samplesDir, "form", "lock", tt.inFile)
 		outFile := filepath.Join(samplesDir, "form", "lock", tt.outFile)
-		if err := api.UnlockFormFieldsFile(inFile, outFile, nil, conf); err != nil {
+		if err := pdf.UnlockFormFieldsFile(inFile, outFile, nil, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -178,7 +178,7 @@ func TestExportForm(t *testing.T) {
 	} {
 		inFile := filepath.Join(inDir, tt.inFile)
 		outFile := filepath.Join(outDir, tt.outFile)
-		if err := api.ExportFormFile(inFile, outFile, conf); err != nil {
+		if err := pdf.ExportFormFile(inFile, outFile, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -205,7 +205,7 @@ func TestFillForm(t *testing.T) {
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileJSON := filepath.Join(jsonDir, tt.inFileJSON)
 		outFile := filepath.Join(outDir, tt.outFile)
-		if err := api.FillFormFile(inFile, inFileJSON, outFile, conf); err != nil {
+		if err := pdf.FillFormFile(inFile, inFileJSON, outFile, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -227,7 +227,7 @@ func TestMultiFillFormJSON(t *testing.T) {
 	} {
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileJSON := filepath.Join(jsonDir, tt.inFileJSON)
-		if err := api.MultiFillFormFile(inFile, inFileJSON, outDir, inFile, false, conf); err != nil {
+		if err := pdf.MultiFillFormFile(inFile, inFileJSON, outDir, inFile, false, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -249,7 +249,7 @@ func TestMultiFillFormJSONMerged(t *testing.T) {
 	} {
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileJSON := filepath.Join(jsonDir, tt.inFileJSON)
-		if err := api.MultiFillFormFile(inFile, inFileJSON, outDir, inFile, true, conf); err != nil {
+		if err := pdf.MultiFillFormFile(inFile, inFileJSON, outDir, inFile, true, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -272,7 +272,7 @@ func TestMultiFillFormCSV(t *testing.T) {
 
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileCSV := filepath.Join(csvDir, tt.inFileCSV)
-		if err := api.MultiFillFormFile(inFile, inFileCSV, outDir, inFile, false, conf); err != nil {
+		if err := pdf.MultiFillFormFile(inFile, inFileCSV, outDir, inFile, false, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}
@@ -295,7 +295,7 @@ func TestMultiFillFormCSVMerged(t *testing.T) {
 
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileCSV := filepath.Join(csvDir, tt.inFileCSV)
-		if err := api.MultiFillFormFile(inFile, inFileCSV, outDir, inFile, true, conf); err != nil {
+		if err := pdf.MultiFillFormFile(inFile, inFileCSV, outDir, inFile, true, conf); err != nil {
 			t.Fatalf("%s: %v\n", tt.msg, err)
 		}
 	}

@@ -24,7 +24,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/types"
 )
@@ -37,14 +37,14 @@ func testImportImages(t *testing.T, msg string, imgFiles []string, outFile, impC
 	// which overrides all other import conf parms.
 	imp := core.DefaultImportConfig()
 	if impConf != "" {
-		if imp, err = api.Import(impConf, types.POINTS); err != nil {
+		if imp, err = pdf.Import(impConf, types.POINTS); err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
 	}
-	if err := api.ImportImagesFile(imgFiles, outFile, imp, nil); err != nil {
+	if err := pdf.ImportImagesFile(imgFiles, outFile, imp, nil); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -114,7 +114,7 @@ func TestMemBasedWriterPanic(t *testing.T) {
 
 	outBuf := &bytes.Buffer{}
 
-	if err := api.ImportImages(nil, outBuf, rr, nil, nil); err != nil {
+	if err := pdf.ImportImages(nil, outBuf, rr, nil, nil); err != nil {
 		t.Fatal(err)
 	}
 

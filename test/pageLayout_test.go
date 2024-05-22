@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -33,7 +33,7 @@ func TestPageLayout(t *testing.T) {
 
 	pageLayout := model.PageLayoutTwoColumnLeft
 
-	pl, err := api.PageLayoutFile(inFile, nil)
+	pl, err := pdf.PageLayoutFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list pageLayout: %v\n", msg, inFile, err)
 	}
@@ -41,11 +41,11 @@ func TestPageLayout(t *testing.T) {
 		t.Fatalf("%s %s: list pageLayout, unexpected: %s\n", msg, inFile, pl)
 	}
 
-	if err := api.SetPageLayoutFile(inFile, "", pageLayout, nil); err != nil {
+	if err := pdf.SetPageLayoutFile(inFile, "", pageLayout, nil); err != nil {
 		t.Fatalf("%s %s: set pageLayout: %v\n", msg, inFile, err)
 	}
 
-	pl, err = api.PageLayoutFile(inFile, nil)
+	pl, err = pdf.PageLayoutFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list pageLayout: %v\n", msg, inFile, err)
 	}
@@ -56,11 +56,11 @@ func TestPageLayout(t *testing.T) {
 		t.Fatalf("%s %s: list pageLayout, want:%s, got:%s\n", msg, inFile, pageLayout.String(), pl.String())
 	}
 
-	if err := api.ResetPageLayoutFile(inFile, "", nil); err != nil {
+	if err := pdf.ResetPageLayoutFile(inFile, "", nil); err != nil {
 		t.Fatalf("%s %s: reset pageLayout: %v\n", msg, inFile, err)
 	}
 
-	pl, err = api.PageLayoutFile(inFile, nil)
+	pl, err = pdf.PageLayoutFile(inFile, nil)
 	if err != nil {
 		t.Fatalf("%s %s: list page layout: %v\n", msg, inFile, err)
 	}

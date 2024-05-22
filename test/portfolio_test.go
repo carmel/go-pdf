@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 )
 
 func TestPortfolio(t *testing.T) {
@@ -42,7 +42,7 @@ func TestPortfolio(t *testing.T) {
 		filepath.Join(outDir, "go-lecture.pdf"),
 		filepath.Join(outDir, "test.wav") + ", test audio file",
 	}
-	if err := api.AddAttachmentsFile(fileName, "", files, true, nil); err != nil {
+	if err := pdf.AddAttachmentsFile(fileName, "", files, true, nil); err != nil {
 		t.Fatalf("%s add portfolio entries: %v\n", msg, err)
 	}
 
@@ -50,29 +50,29 @@ func TestPortfolio(t *testing.T) {
 	listAttachments(t, msg, fileName, 4)
 
 	// Extract all portfolio entries.
-	if err := api.ExtractAttachmentsFile(fileName, outDir, nil, nil); err != nil {
+	if err := pdf.ExtractAttachmentsFile(fileName, outDir, nil, nil); err != nil {
 		t.Fatalf("%s extract all portfolio entries: %v\n", msg, err)
 	}
 
 	// Extract 1 portfolio entry.
-	if err := api.ExtractAttachmentsFile(fileName, outDir, []string{"golang.pdf"}, nil); err != nil {
+	if err := pdf.ExtractAttachmentsFile(fileName, outDir, []string{"golang.pdf"}, nil); err != nil {
 		t.Fatalf("%s extract one portfolio entry: %v\n", msg, err)
 	}
 
 	// Remove 1 portfolio entry.
-	if err := api.RemoveAttachmentsFile(fileName, "", []string{"golang.pdf"}, nil); err != nil {
+	if err := pdf.RemoveAttachmentsFile(fileName, "", []string{"golang.pdf"}, nil); err != nil {
 		t.Fatalf("%s remove one portfolio entry: %v\n", msg, err)
 	}
 	listAttachments(t, msg, fileName, 3)
 
 	// Remove all portfolio entries.
-	if err := api.RemoveAttachmentsFile(fileName, "", nil, nil); err != nil {
+	if err := pdf.RemoveAttachmentsFile(fileName, "", nil, nil); err != nil {
 		t.Fatalf("%s remove all portfolio entries: %v\n", msg, err)
 	}
 	listAttachments(t, msg, fileName, 0)
 
 	// Validate the processed file.
-	if err := api.ValidateFile(fileName, nil); err != nil {
+	if err := pdf.ValidateFile(fileName, nil); err != nil {
 		t.Fatalf("%s: validate: %v\n", msg, err)
 	}
 }

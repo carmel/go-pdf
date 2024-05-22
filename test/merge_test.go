@@ -23,7 +23,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 )
 
 func TestMergeCreateNew(t *testing.T) {
@@ -39,22 +39,22 @@ func TestMergeCreateNew(t *testing.T) {
 	// Bookmarks for the merged document will be created/preserved per default (see config.yaml)
 
 	outFile := filepath.Join(outDir, "out.pdf")
-	if err := api.MergeCreateFile(inFiles, outFile, false, nil); err != nil {
+	if err := pdf.MergeCreateFile(inFiles, outFile, false, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
 	// Insert an empty page between merged files.
 	outFile = filepath.Join(outDir, "outWithDivider.pdf")
 	dividerPage := true
-	if err := api.MergeCreateFile(inFiles, outFile, dividerPage, nil); err != nil {
+	if err := pdf.MergeCreateFile(inFiles, outFile, dividerPage, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -68,11 +68,11 @@ func TestMergeCreateZipped(t *testing.T) {
 	inFile1 := filepath.Join(inDir, "Acroforms2.pdf")
 	outFile := filepath.Join(outDir, "out.pdf")
 
-	if err := api.MergeCreateZipFile(inFile1, inFile2, outFile, nil); err != nil {
+	if err := pdf.MergeCreateZipFile(inFile1, inFile2, outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -93,19 +93,19 @@ func TestMergeAppendNew(t *testing.T) {
 
 	// Bookmarks for the merged document will be created/preserved per default (see config.yaml)
 
-	if err := api.MergeAppendFile(inFiles, outFile, false, nil); err != nil {
+	if err := pdf.MergeAppendFile(inFiles, outFile, false, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
 	anotherFile := filepath.Join(inDir, "testRot.pdf")
-	err := api.MergeAppendFile([]string{anotherFile}, outFile, false, nil)
+	err := pdf.MergeAppendFile([]string{anotherFile}, outFile, false, nil)
 	if err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -122,7 +122,7 @@ func TestMergeToBufNew(t *testing.T) {
 	inFiles = inFiles[1:]
 
 	buf := &bytes.Buffer{}
-	if err := api.Merge(destFile, inFiles, buf, nil, false); err != nil {
+	if err := pdf.Merge(destFile, inFiles, buf, nil, false); err != nil {
 		t.Fatalf("%s: merge: %v\n", msg, err)
 	}
 
@@ -130,7 +130,7 @@ func TestMergeToBufNew(t *testing.T) {
 		t.Fatalf("%s: write: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -160,7 +160,7 @@ func TestMergeRaw(t *testing.T) {
 	rsc[1] = f1
 
 	buf := &bytes.Buffer{}
-	if err := api.MergeRaw(rsc, buf, false, nil); err != nil {
+	if err := pdf.MergeRaw(rsc, buf, false, nil); err != nil {
 		t.Fatalf("%s: merge: %v\n", msg, err)
 	}
 
@@ -168,7 +168,7 @@ func TestMergeRaw(t *testing.T) {
 		t.Fatalf("%s: write: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

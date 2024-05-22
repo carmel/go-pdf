@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 	"github.com/carmel/go-pdf/core/model"
 )
@@ -44,7 +44,7 @@ func listPropertiesFile(t *testing.T, fileName string, conf *model.Configuration
 	}
 	conf.Cmd = model.LISTPROPERTIES
 
-	ctx, err := api.ReadValidateAndOptimize(f, conf)
+	ctx, err := pdf.ReadValidateAndOptimize(f, conf)
 	if err != nil {
 		t.Fatalf("%s ReadValidateAndOptimize: %v\n", msg, err)
 	}
@@ -84,19 +84,19 @@ func TestProperties(t *testing.T) {
 	listProperties(t, msg, fileName, nil)
 
 	properties := map[string]string{"name1": "value1", "nameÖ": "valueö"}
-	if err := api.AddPropertiesFile(fileName, "", properties, nil); err != nil {
+	if err := pdf.AddPropertiesFile(fileName, "", properties, nil); err != nil {
 		t.Fatalf("%s add properties: %v\n", msg, err)
 	}
 
 	listProperties(t, msg, fileName, []string{"name1 = value1", "nameÖ = valueö"})
 
-	if err := api.RemovePropertiesFile(fileName, "", []string{"nameÖ"}, nil); err != nil {
+	if err := pdf.RemovePropertiesFile(fileName, "", []string{"nameÖ"}, nil); err != nil {
 		t.Fatalf("%s remove 1 property: %v\n", msg, err)
 	}
 
 	listProperties(t, msg, fileName, []string{"name1 = value1"})
 
-	if err := api.RemovePropertiesFile(fileName, "", nil, nil); err != nil {
+	if err := pdf.RemovePropertiesFile(fileName, "", nil, nil); err != nil {
 		t.Fatalf("%s remove all properties: %v\n", msg, err)
 	}
 

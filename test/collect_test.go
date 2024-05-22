@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core"
 )
 
@@ -31,11 +31,11 @@ func TestCollect(t *testing.T) {
 	outFile := filepath.Join(outDir, "myPageSequence.pdf")
 
 	// Start with all odd pages but page 1, then append pages 8-11 and the last page.
-	if err := api.CollectFile(inFile, outFile, []string{"odd", "!1", "8-11", "l"}, nil); err != nil {
+	if err := pdf.CollectFile(inFile, outFile, []string{"odd", "!1", "8-11", "l"}, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }
@@ -46,13 +46,13 @@ func TestCollectLowLevel(t *testing.T) {
 	outFile := filepath.Join(outDir, "MyCollectedPages.pdf")
 
 	// Create a context.
-	ctx, err := api.ReadContextFile(inFile)
+	ctx, err := pdf.ReadContextFile(inFile)
 	if err != nil {
 		t.Fatalf("%s readContext: %v\n", msg, err)
 	}
 
 	// Collect pages.
-	selectedPages, err := api.PagesForPageCollection(ctx.PageCount, []string{"odd", "!1", "8-11", "l"})
+	selectedPages, err := pdf.PagesForPageCollection(ctx.PageCount, []string{"odd", "!1", "8-11", "l"})
 	if err != nil {
 		t.Fatalf("%s PagesForPageCollection: %v\n", msg, err)
 	}
@@ -66,7 +66,7 @@ func TestCollectLowLevel(t *testing.T) {
 	// Here you can process this single page PDF context.
 
 	// Write context to file.
-	if err := api.WriteContextFile(ctxNew, outFile); err != nil {
+	if err := pdf.WriteContextFile(ctxNew, outFile); err != nil {
 		t.Fatalf("%s write: %v\n", msg, err)
 	}
 }

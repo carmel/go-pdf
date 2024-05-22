@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -36,7 +36,7 @@ func listKeywordsFile(t *testing.T, fileName string, conf *model.Configuration) 
 	}
 	defer f.Close()
 
-	return api.Keywords(f, conf)
+	return pdf.Keywords(f, conf)
 }
 
 func listKeywords(t *testing.T, msg, fileName string, want []string) []string {
@@ -72,19 +72,19 @@ func TestKeywords(t *testing.T) {
 
 	keywords := []string{"Ö", "keyword2"}
 
-	if err := api.AddKeywordsFile(fileName, "", keywords, nil); err != nil {
+	if err := pdf.AddKeywordsFile(fileName, "", keywords, nil); err != nil {
 		t.Fatalf("%s add keywords: %v\n", msg, err)
 	}
 
 	listKeywords(t, msg, fileName, keywords)
 
-	if err := api.RemoveKeywordsFile(fileName, "", []string{"keyword2"}, nil); err != nil {
+	if err := pdf.RemoveKeywordsFile(fileName, "", []string{"keyword2"}, nil); err != nil {
 		t.Fatalf("%s remove 1 keyword: %v\n", msg, err)
 	}
 
 	listKeywords(t, msg, fileName, []string{"Ö"})
 
-	if err := api.RemoveKeywordsFile(fileName, "", nil, nil); err != nil {
+	if err := pdf.RemoveKeywordsFile(fileName, "", nil, nil); err != nil {
 		t.Fatalf("%s remove all keywords: %v\n", msg, err)
 	}
 

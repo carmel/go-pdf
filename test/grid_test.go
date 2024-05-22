@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -33,19 +33,19 @@ func testGrid(t *testing.T, msg string, inFiles []string, outFile string, select
 	)
 
 	if isImg {
-		if nup, err = api.ImageGridConfig(rows, cols, desc, conf); err != nil {
+		if nup, err = pdf.ImageGridConfig(rows, cols, desc, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
 	} else {
-		if nup, err = api.PDFGridConfig(rows, cols, desc, conf); err != nil {
+		if nup, err = pdf.PDFGridConfig(rows, cols, desc, conf); err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)
 		}
 	}
 
-	if err := api.NUpFile(inFiles, outFile, selectedPages, nup, conf); err != nil {
+	if err := pdf.NUpFile(inFiles, outFile, selectedPages, nup, conf); err != nil {
 		t.Fatalf("%s %s: %v\n", msg, outFile, err)
 	}
-	if err := api.ValidateFile(outFile, conf); err != nil {
+	if err := pdf.ValidateFile(outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 }

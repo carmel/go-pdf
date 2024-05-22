@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/carmel/go-pdf/api"
+	"github.com/carmel/go-pdf"
 	"github.com/carmel/go-pdf/core/model"
 )
 
@@ -42,11 +42,11 @@ func createPDF(t *testing.T, msg, inFile, inFileJSON, outFile string, conf *mode
 		outFile = inFile
 	}
 
-	if err := api.CreateFile(inFile, inFileJSON, outFile, conf); err != nil {
+	if err := pdf.CreateFile(inFile, inFileJSON, outFile, conf); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
-	if err := api.ValidateFile(outFile, nil); err != nil {
+	if err := pdf.ValidateFile(outFile, nil); err != nil {
 		t.Fatalf("%s: %v\n", msg, err)
 	}
 
